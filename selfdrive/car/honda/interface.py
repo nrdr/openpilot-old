@@ -25,7 +25,7 @@ class CarInterface(CarInterfaceBase):
     else:
       # NIDECs don't allow acceleration near cruise_speed,
       # so limit limits of pid to prevent windup
-      ACCEL_MAX_VALS = [CarControllerParams.NIDEC_ACCEL_MAX, 0.2]
+      ACCEL_MAX_VALS = [CarControllerParams.NIDEC_ACCEL_MAX, 3.2] if CP.enableGasInterceptor else [CarControllerParams.NIDEC_ACCEL_MAX, 0.2] # pedal needs higher limit to reach set speed
       ACCEL_MAX_BP = [cruise_speed - 2., cruise_speed - .2]
       return CarControllerParams.NIDEC_ACCEL_MIN, interp(current_speed, ACCEL_MAX_BP, ACCEL_MAX_VALS)
 
@@ -74,6 +74,9 @@ class CarInterface(CarInterfaceBase):
       ret.longitudinalTuning.kpV = [0.25]
       ret.longitudinalTuning.kiV = [0.05]
       ret.longitudinalActuatorDelayUpperBound = 0.5 # s
+    elif ret.enableGasInterceptor:
+      # pedal longitudinal tuning for all hondas
+      ret.stoppingDecelRate = 0.2 # avoid harsh braking when entering stopped state
     else:
       # default longitudinal tuning for all hondas
       ret.longitudinalTuning.kpBP = [0., 5., 35.]
