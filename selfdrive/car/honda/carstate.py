@@ -25,6 +25,7 @@ def get_can_signals(CP, gearbox_msg, main_on_sig_msg):
     ("MOTOR_TORQUE", "STEER_MOTOR_TORQUE"),
     ("STEER_TORQUE_SENSOR", "STEER_STATUS"),
     ("IMPERIAL_UNIT", "CAR_SPEED"),
+    ("ROUGH_CAR_SPEED_2", "CAR_SPEED"),
     ("LEFT_BLINKER", "SCM_FEEDBACK"),
     ("RIGHT_BLINKER", "SCM_FEEDBACK"),
     ("SEATBELT_DRIVER_LAMP", "SEATBELT_STATUS"),
@@ -169,7 +170,11 @@ class CarState(CarStateBase):
     self.prev_acc_mads_combo = None
     self.prev_brake_pressed = False
     self.gap_adjust_cruise_tr = 0
-
+    
+    # When available we use cp.vl["CAR_SPEED"]["ROUGH_CAR_SPEED_2"] to populate vEgoCluster
+    # However, on some cars this is not present (HRV, FIT, CRV 2016, ILX and RDX)
+    self.dash_speed_seen = False
+    
   def update(self, cp, cp_cam, cp_body):
     ret = car.CarState.new_message()
 
@@ -223,6 +228,13 @@ class CarState(CarStateBase):
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
 
     self.belowLaneChangeSpeed = ret.vEgo < (30 * CV.MPH_TO_MS) and self.below_speed_pause
+    
+    self.dash_speed_seen |= (cp.vl["CAR_SPEED"]["ROUGH_CAR_SPEED_2"] > 1e-3)
+    if self.dash_speed_seen:
+      conversion = CV.KPH_TO_MS if self.is_metric else CV.MPH_TO_MS
+      ret.vEgoCluster = cp.vl["CAR_SPEED"]["ROUGH_CAR_SPEED_2"] * conversion
+    else:
+      ret.vEgoCluster = ret.vEgo
 
     ret.steeringAngleDeg = cp.vl["STEERING_SENSORS"]["STEER_ANGLE"]
     ret.steeringRateDeg = cp.vl["STEERING_SENSORS"]["STEER_ANGLE_RATE"]
