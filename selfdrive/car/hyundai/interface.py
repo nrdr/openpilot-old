@@ -71,7 +71,7 @@ class CarInterface(CarInterfaceBase):
     elif candidate in (CAR.SONATA, CAR.SONATA_HYBRID):
       ret.mass = 1513. + STD_CARGO_KG
       ret.wheelbase = 2.84
-      ret.steerRatio = 12.35
+      ret.steerRatio = 15.35
       tire_stiffness_factor = 0.65
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]

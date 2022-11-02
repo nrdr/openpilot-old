@@ -46,7 +46,7 @@ class CarInterface(CarInterfaceBase):
     if candidate == CAR.PRIUS:
       stop_and_go = True
       ret.wheelbase = 2.70
-      ret.steerRatio = 15.74   # unknown end-to-end spec
+      ret.steerRatio = 18.74   # unknown end-to-end spec
       tire_stiffness_factor = 0.6371   # hand-tune
       ret.mass = 3045. * CV.LB_TO_KG + STD_CARGO_KG
       # Only give steer angle deadzone to for bad angle sensor prius
@@ -66,7 +66,7 @@ class CarInterface(CarInterfaceBase):
     elif candidate in (CAR.RAV4, CAR.RAV4H):
       stop_and_go = True if (candidate in CAR.RAV4H) else False
       ret.wheelbase = 2.65
-      ret.steerRatio = 16.88   # 14.5 is spec end-to-end
+      ret.steerRatio = 18.88   # 14.5 is spec end-to-end
       tire_stiffness_factor = 0.5533
       ret.mass = 3650. * CV.LB_TO_KG + STD_CARGO_KG  # mean between normal and hybrid
 
@@ -117,7 +117,7 @@ class CarInterface(CarInterfaceBase):
     elif candidate in (CAR.RAV4_TSS2, CAR.RAV4_TSS2_2022, CAR.RAV4H_TSS2, CAR.RAV4H_TSS2_2022):
       stop_and_go = True
       ret.wheelbase = 2.68986
-      ret.steerRatio = 14.3
+      ret.steerRatio = 17.3
       tire_stiffness_factor = 0.7933
       ret.mass = 3585. * CV.LB_TO_KG + STD_CARGO_KG  # Average between ICE and Hybrid
 
