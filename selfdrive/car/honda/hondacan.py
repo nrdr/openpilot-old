@@ -109,7 +109,7 @@ def create_ui_commands(packer, CP, enabled, lat_active, pcm_speed, hud, is_metri
 
   if CP.openpilotLongitudinalControl:
     acc_hud_values = {
-      'CRUISE_SPEED': hud.v_cruise,
+      'CRUISE_SPEED': 255, # Hide due to mismatch
       'ENABLE_MINI_CAR': 1,
       'HUD_DISTANCE': gap_adjust_cruise_tr,  # max distance setting on display
       'IMPERIAL_UNIT': int(not is_metric),
